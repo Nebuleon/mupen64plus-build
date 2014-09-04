@@ -1,0 +1,10 @@
+[Desktop Entry]
+
+Name=mupen64ALPHA
+Comment=mupen64plus alpha build (DATE)
+Exec=mupen64plus --resolution 320x240 --gfx mupen64plus-video-n64.so %f
+Icon=mupen
+Type=Application
+StartupNotify=true
+Categories=emulators;
+MimeType=application/x-n64-rom;

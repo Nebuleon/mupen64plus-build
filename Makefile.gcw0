@@ -30,9 +30,17 @@ CFLAGS := -DSDL_VIDEO_OPENGL_ES2 -DMESA_EGL_NO_X11_HEADERS
 OPTFLAGS := -O3
 # put -O3 in OPTFLAGS if you want linking to be faster, or -O3 -flto for runtime
 
-MAKE_ENV := CROSS_COMPILE="$(CROSS_COMPILE)" CFLAGS="$(CFLAGS)" OPTFLAGS="$(OPTFLAGS)" \
-	PKG_CONFIG="$(PKG_CONFIG)" SDL_CONFIG="$(SDL_CONFIG)" \
-	UNAME=linux HOST_CPU=mips OSD=0 NO_OSS=1 NO_SRC=1 NO_SPEEX=1
+UNAME := linux
+HOST_CPU := mips
+OSD := 0
+NO_OSS := 1
+NO_SRC := 1
+NO_SPEEX := 1
+
+export CROSS_COMPILE CC CFLAGS OPTFLAGS UNAME HOST_CPU OSD NO_OSS NO_SRC NO_SPEEX
+
+# override the location of these tools
+MAKE_OPTS := PKG_CONFIG="$(PKG_CONFIG)" SDL_CONFIG="$(SDL_CONFIG)"
 
 DATE := $(shell date -u +"%Y-%m-%d %H:%M:%S UTC")
 
@@ -55,20 +63,20 @@ out/default.gcw0.desktop: default.gcw0.desktop out
 	sed "s/DATE/$(DATE)/g" $< > $@
 
 core: out
-	+$(MAKE_ENV) make -C ../mupen64plus-core/projects/unix all
+	+make -C ../mupen64plus-core/projects/unix $(MAKE_OPTS) all
 	cp ../mupen64plus-core/projects/unix/libmupen64plus.so.2.0.0 out/libmupen64plus.so.2.0.0
 	ln -sf libmupen64plus.so.2.0.0 out/libmupen64plus.so.2
 
 mupen64plus: out
-	+$(MAKE_ENV) make -C ../mupen64plus-ui-console/projects/unix all
+	+make -C ../mupen64plus-ui-console/projects/unix $(MAKE_OPTS) all
 	cp ../mupen64plus-ui-console/projects/unix/mupen64plus out/$@
 
 video-gles2n64: out
-	+$(MAKE_ENV) make -C ../mupen64plus-video-gles2n64/projects/unix all
+	+make -C ../mupen64plus-video-gles2n64/projects/unix $(MAKE_OPTS) all
 	cp ../mupen64plus-video-gles2n64/projects/unix/mupen64plus-video-n64.so out/mupen64plus-video-n64.so
 
 rsp-hle input-sdl audio-sdl: out
-	+$(MAKE_ENV) make -C ../mupen64plus-$@/projects/unix all
+	+make -C ../mupen64plus-$@/projects/unix $(MAKE_OPTS) all
 	cp ../mupen64plus-$@/projects/unix/mupen64plus-$@.so out/mupen64plus-$@.so
 
 out:
@@ -77,10 +85,10 @@ out:
 	cp ../mupen64plus-input-sdl/data/InputAutoCfg.ini $@/InputAutoCfg.ini
 
 clean:
-	$(MAKE_ENV) make -C ../mupen64plus-core/projects/unix clean
-	$(MAKE_ENV) make -C ../mupen64plus-input-sdl/projects/unix clean
-	$(MAKE_ENV) make -C ../mupen64plus-audio-sdl/projects/unix clean
-	$(MAKE_ENV) make -C ../mupen64plus-rsp-hle/projects/unix clean
-	$(MAKE_ENV) make -C ../mupen64plus-ui-console/projects/unix clean
-	$(MAKE_ENV) make -C ../mupen64plus-video-gles2n64/projects/unix clean
+	make -C ../mupen64plus-core/projects/unix $(MAKE_OPTS) clean
+	make -C ../mupen64plus-input-sdl/projects/unix $(MAKE_OPTS) clean
+	make -C ../mupen64plus-audio-sdl/projects/unix $(MAKE_OPTS) clean
+	make -C ../mupen64plus-rsp-hle/projects/unix $(MAKE_OPTS) clean
+	make -C ../mupen64plus-ui-console/projects/unix $(MAKE_OPTS) clean
+	make -C ../mupen64plus-video-gles2n64/projects/unix $(MAKE_OPTS) clean
 	rm -rf out

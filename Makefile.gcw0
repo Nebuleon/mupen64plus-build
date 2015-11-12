@@ -27,7 +27,7 @@ SDL_CONFIG := $(SYSROOT)/usr/bin/sdl2-config
 
 CFLAGS := -DSDL_VIDEO_OPENGL_ES2 -DMESA_EGL_NO_X11_HEADERS
 # put -Dname=value in CFLAGS for conditional compilation
-OPTFLAGS := -O3
+OPTFLAGS := -O3 -flto
 # put -O3 in OPTFLAGS if you want linking to be faster, or -O3 -flto for runtime
 
 UNAME := linux

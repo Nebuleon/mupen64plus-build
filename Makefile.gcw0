@@ -23,7 +23,7 @@ CROSS_COMPILE := mipsel-linux-
 CC := $(CROSS_COMPILE)gcc
 SYSROOT := $(shell $(CC) --print-sysroot)
 PKG_CONFIG := env PKG_CONFIG_SYSROOT_DIR=$(SYSROOT) PKG_CONFIG_LIBDIR=$(SYSROOT)/usr/lib/pkgconfig pkg-config
-SDL_CONFIG := $(SYSROOT)/usr/bin/sdl-config
+SDL_CONFIG := $(SYSROOT)/usr/bin/sdl2-config
 
 CFLAGS := -DSDL_VIDEO_OPENGL_ES2 -DMESA_EGL_NO_X11_HEADERS
 # put -Dname=value in CFLAGS for conditional compilation
